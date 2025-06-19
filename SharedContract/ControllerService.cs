@@ -5,18 +5,34 @@ using ProtoBuf.Grpc;
 namespace WebApplicationMatrix.Contract;
 
 [DataContract]
-public class ControllerInfo
+public class MathTask
 {
     [DataMember(Order = 1)]
-    public string IpAddress { get; set; }
+    public double Number1 { get; set; }
 
     [DataMember(Order = 2)]
-    public string ControllerName { get; set; }
+    public double Number2 { get; set; }
+
+    [DataMember(Order = 3)]
+    public string Operation { get; set; } 
+
+    [DataMember(Order = 4)]
+    public DateTime Timestamp { get; set; }
+}
+
+[DataContract]
+public class MathResult
+{
+    [DataMember(Order = 1)]
+    public double Result { get; set; }
+
+    [DataMember(Order = 2)]
+    public DateTime Timestamp { get; set; }
 }
 
 [ServiceContract]
 public interface IControllerService
 {
     [OperationContract]
-    IAsyncEnumerable<ControllerInfo> StreamControllersAsync(CallContext context = default);
+    IAsyncEnumerable<MathTask> StreamMessagesAsync(IAsyncEnumerable<MathResult> clientResults, CallContext context = default);
 }

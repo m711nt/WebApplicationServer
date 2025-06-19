@@ -1,8 +1,8 @@
 using ProtoBuf.Grpc.Server;
-using WebApplicationMatrix.Service;
 using WebApplicationMatrix.Contract;
+using WebApplicationMatrix.Service;
 
-namespace WebApplicationMatrix
+namespace WebApplicationMatrix.Server
 {
     public class Program
     {
