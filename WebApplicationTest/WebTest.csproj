@@ -27,8 +27,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SharedContract\SharedContract.csproj" />
-    <ProjectReference Include="..\WebApplicationClient\WebApplicationClient.csproj" />
-    <ProjectReference Include="..\WebApplicationServer\WebApplicationServer.csproj" />
+    <ProjectReference Include="..\WebApplicationClient\WebClient.csproj" />
+    <ProjectReference Include="..\WebApplicationServer\WebServer.csproj" />
   </ItemGroup>
 
   <ItemGroup>

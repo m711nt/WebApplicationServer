@@ -45,7 +45,6 @@ public class RegCommand : BaseCommand
 [ProtoContract]
 public class RequestJobCommand : BaseCommand
 {
-    // Можно добавить параметры фильтрации, если потребуется
 }
 
 [ProtoContract]
