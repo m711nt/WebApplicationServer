@@ -4,14 +4,12 @@ using System.Collections.Generic;
 
 namespace WebApplicationServer.Service
 {
-    // Заглушка для джобы
     public class JobStub
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Payload { get; set; }
     }
 
-    // Синглтон-хранилище джобов
     public class JobStorage
     {
         private static readonly Lazy<JobStorage> _instance = new(() => new JobStorage());
