@@ -22,7 +22,7 @@ namespace WebApplicationServer.Service
         private readonly ConcurrentDictionary<Guid, JobStub> _jobs = new();
         private readonly ConcurrentDictionary<ClientConnectionId, List<Guid>> _clientJobs = new();
 
-        private JobStorage() { }
+        public JobStorage() { }
 
         public bool AddJob(JobStub job)
         {

@@ -10,7 +10,6 @@ namespace WebApplicationServer.Handlers
     {
         public ValueTask HandleAsync(JobAssignCommand command)
         {
-            // Назначаем джобу клиенту (добавляем в клиентский список)
             jobStorage.AssignJobToClient(command.ClientId, command.JobId);
             return ValueTask.CompletedTask;
         }
