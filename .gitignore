@@ -361,3 +361,11 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Игнорировать папки и файлы JetBrains/IntelliJ/IDEA
+.idea/
+*.iml
+
+# Игнорировать служебные файлы IDE
+indexLayout.xml
+vcs.xml
