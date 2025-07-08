@@ -16,7 +16,8 @@ namespace WebApplicationClient
                     options.Address = new Uri("https://localhost:7159");
                 });
 
-            builder.Services.AddHostedService<CommandHandlerService>();
+            builder.Services.AddSingleton<CommandHandlerService>();
+            builder.Services.AddHostedService(sp => sp.GetRequiredService<CommandHandlerService>());
 
             builder.Services.AddLogging();
 

@@ -16,6 +16,9 @@ namespace SharedContract;
 [ProtoInclude(107, typeof(ReturnJobAck))]
 [ProtoInclude(108, typeof(AcknowledgeJobCommand))]
 [ProtoInclude(109, typeof(AcknowledgeJobAck))]
+[ProtoInclude(110, typeof(JobAssignCommand))]
+[ProtoInclude(111, typeof(JobRevokeCommand))]
+[ProtoInclude(112, typeof(JobReturnCommand))]
 public abstract class BaseCommand { }
 
 [ProtoContract]
@@ -94,6 +97,42 @@ public class AcknowledgeJobAck : BaseCommand
 {
     [ProtoMember(1)]
     public Guid JobId { get; set; }
+}
+
+[ProtoContract]
+public readonly struct ClientConnectionId
+{
+    [ProtoMember(1)]
+    public Guid Value { get; init; }
+    public ClientConnectionId(Guid value) => Value = value;
+    public override string ToString() => Value.ToString();
+}
+
+[ProtoContract]
+public class JobAssignCommand : BaseCommand
+{
+    [ProtoMember(1)]
+    public Guid JobId { get; set; }
+    [ProtoMember(2)]
+    public ClientConnectionId ClientId { get; set; }
+}
+
+[ProtoContract]
+public class JobRevokeCommand : BaseCommand
+{
+    [ProtoMember(1)]
+    public Guid JobId { get; set; }
+    [ProtoMember(2)]
+    public ClientConnectionId ClientId { get; set; }
+}
+
+[ProtoContract]
+public class JobReturnCommand : BaseCommand
+{
+    [ProtoMember(1)]
+    public Guid JobId { get; set; }
+    [ProtoMember(2)]
+    public ClientConnectionId ClientId { get; set; }
 }
 
 [ServiceContract]

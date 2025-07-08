@@ -1,4 +1,3 @@
-using ProtoBuf.Grpc.ClientFactory;
 using ProtoBuf.Grpc.Server;
 using SharedContract;
 using WebApplicationServer.Service;
@@ -22,6 +21,10 @@ namespace WebApplicationServer
             builder.Services.AddSingleton<ServerCommandManager>();
             builder.Services.AddScoped<IControllerService, ControllerService>();
             builder.Services.AddTransient<ICommandHandler<HelloCommand>, HelloCommandHandler>();
+            builder.Services.AddSingleton<JobStorage>();
+            builder.Services.AddTransient<ICommandHandler<JobAssignCommand>, JobAssignCommandHandler>();
+            builder.Services.AddTransient<ICommandHandler<JobRevokeCommand>, JobRevokeCommandHandler>();
+            builder.Services.AddTransient<ICommandHandler<JobReturnCommand>, JobReturnCommandHandler>();
 
             builder.Services.AddLogging();
 

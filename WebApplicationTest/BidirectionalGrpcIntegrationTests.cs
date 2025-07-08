@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using ProtoBuf.Grpc.ClientFactory;
 using SharedContract;
 using WebApplicationClient.Services;
-using WebApplicationServer.Services;
 
 namespace WebApplicationTest;
 
@@ -21,7 +20,6 @@ public class BidirectionalGrpcIntegrationTests : IAsyncLifetime
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    // При необходимости можно подменить сервисы сервера
                 });
             });
 
@@ -61,40 +59,29 @@ public class BidirectionalGrpcIntegrationTests : IAsyncLifetime
         SynchronizationContext.SetSynchronizationContext(syncContext);
 
         // Arrange
-        var commandService = _clientApp!.Services.GetRequiredService<ServerCommandManager>();
+        var handlerService = _clientApp.Services.GetRequiredService<CommandHandlerService>();
         var testCommand = new SimpleMessage
         {
             Command = new HelloCommand { Id = 666 },
             Timestamp = DateTime.UtcNow
         };
 
-        // Act - клиент отправляет сообщение серверу
-        var clientId = new ServerCommandManager.ClientConnectionId();
-        commandService.Subscribe(clientId);
+        // Act - клиент отправляет сообщение серверу через свою очередь
+        handlerService.EnqueueOutgoingMessage(testCommand);
 
-        await commandService.SendCommandAsync(clientId, testCommand).ConfigureAwait(false);
-
-        // Даем время на обработку (лучше заменить на явное ожидание)
-        while (true)
+        // Ждем ответ от клиента (RegCommand)
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        bool received = false;
+        while (sw.Elapsed < TimeSpan.FromSeconds(5))
         {
-            await Task.Yield();
+            if (handlerService.TryDequeueIncomingMessage(out var msg) && msg.Command is RegCommand reg && reg.Registered)
+            {
+                received = true;
+                break;
+            }
+            await Task.Delay(10);
         }
-
-
-        // Assert - проверяем, что сервер получил сообщение
-        // Здесь нужно добавить проверку состояния сервера через его публичный API
-        // Например:
-        // var serverStats = await GetServerStatsAsync();
-        // Assert.Contains(666, serverStats.ReceivedCommands);
-
-        // Act - сервер отправляет ответ (если это предусмотрено логикой)
-        // ...
-
-        // Assert - проверяем, что клиент получил ответ
-        // var clientStats = await GetClientStatsAsync();
-        // Assert.True(clientStats.HasResponse);
-
-        //Assert.False(syncContext.PostCalled, "Была попытка вернуться в контекст");
+        Assert.True(received, "Клиент не получил ответ от сервера (RegCommand) за 5 секунд");
     }
 
     public Task DisposeAsync()
